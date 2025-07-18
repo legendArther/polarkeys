@@ -4,7 +4,15 @@ require("dotenv").config();
 
 const app = express();
 app.use(express.json());
+const path = require("path");
 
+// Serve static files from public/
+app.use(express.static(path.join(__dirname, "public")));
+
+// Optional: Handle root URL to return index.html
+app.get("/", (req, res) => {
+  res.sendFile(path.join(__dirname, "public", "index.html"));
+});
 app.post("/verify-receipt", async (req, res) => {
   const { receipt, device_id } = req.body;
   if (!receipt || !device_id) return res.status(400).send("Missing fields");
